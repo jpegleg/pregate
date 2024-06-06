@@ -1,0 +1,8 @@
+rule1 = "cost"
+rule2 = "price"
+rule3 = "money"
+rule4 = "expense"
+rule5 = "bill"
+resp = "To learn more about costs, visit YOURLINK."
+url = "https://SOMELLMAPI/"
+api_key = "Bearer YOURAPIKEY"
