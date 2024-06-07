@@ -75,7 +75,7 @@ pub async fn readit(req: HttpRequest, body: web::Bytes) -> impl Responder {
     let returnbod: String = runrule(rbod).await;
     if returnbod == "Failed to fetch from API" {
         let reada: DateTime<Utc> = Utc::now();
-        log::error!("{} - {} - /api/v1 BACKEND DOWN sending response for:  {:?}", reada, &nid, requ);
+        log::error!("{} - {} - /api/v1 BACKEND DOWN, sending response for:  {:?}", reada, &nid, requ);
     } else {
         let reada: DateTime<Utc> = Utc::now();
         log::info!("{} - {} - /api/v1 sending response for:  {:?}", reada, &nid, requ);
