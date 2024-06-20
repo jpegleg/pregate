@@ -26,19 +26,16 @@ pub async fn runrule(linput: String) -> String {
     let _ = file.expect("failed to read ./pregate-rules.toml").read_to_string(&mut contents);
     let config: Config = toml::from_str(&contents).unwrap();
 
-    if linput.to_lowercase().contains(&config.rule1) {
-        config.resp
-    } else if linput.to_lowercase().contains(&config.rule2) {
-        config.resp
-    } else if linput.to_lowercase().contains(&config.rule3) {
-        config.resp
-    } else if linput.to_lowercase().contains(&config.rule4) {
-        config.resp
-    } else if linput.to_lowercase().contains(&config.rule5) {
-        config.resp
-    } else {
-        let callb = ifetch(config.url, config.api_key, linput).await.unwrap_or_else(|_| "Failed to fetch from API".to_string()).to_string();
-        callb
+    match linput.to_lowercase().as_str() {
+        s if s.contains(&config.rule1) => config.resp,
+        s if s.contains(&config.rule2) => config.resp,
+        s if s.contains(&config.rule3) => config.resp,
+        s if s.contains(&config.rule4) => config.resp,
+        s if s.contains(&config.rule5) => config.resp,
+        _ => {
+            let callb = ifetch(config.url, config.api_key, linput).await.unwrap_or_else(|_| "Failed to fetch from API".to_string()).to_string();
+            callb
+        }
     }
 }
 
