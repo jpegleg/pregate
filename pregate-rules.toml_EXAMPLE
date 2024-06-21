@@ -1,4 +1,5 @@
 rule1 = "cost"
+exception1 = "costello"
 rule2 = "price"
 rule3 = "money"
 rule4 = "expense"
