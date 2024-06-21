@@ -11,6 +11,7 @@ use serde::Deserialize;
 #[derive(Deserialize)]
 struct Config {
     rule1: String,
+    exception1: String,
     rule2: String,
     rule3: String,
     rule4: String,
@@ -27,6 +28,18 @@ pub async fn runrule(linput: String) -> String {
     let config: Config = toml::from_str(&contents).unwrap();
 
     match linput.to_lowercase().as_str() {
+        s if s.contains(&config.exception1) => {
+            match linput.to_lowercase().as_str() {
+                s if s.contains(&config.rule2) => config.resp,
+                s if s.contains(&config.rule3) => config.resp,
+                s if s.contains(&config.rule4) => config.resp,
+                s if s.contains(&config.rule5) => config.resp,
+                _ => {
+                    let callb = ifetch(config.url, config.api_key, linput).await.unwrap_or_else(|_| "Failed to fetch from API".to_string()).to_string();
+                    callb
+                }
+            }
+        }
         s if s.contains(&config.rule1) => config.resp,
         s if s.contains(&config.rule2) => config.resp,
         s if s.contains(&config.rule3) => config.resp,
@@ -40,14 +53,14 @@ pub async fn runrule(linput: String) -> String {
 }
 
 #[allow(unused)]
-#[post("/api/v1")]
+#[post("/api/SOMETHING/v1")]
 pub async fn readit(req: HttpRequest, body: web::Bytes) -> impl Responder {
     let txid = Uuid::new_v4().to_string();
     env::set_var("txid", &txid);
     let peer = req.peer_addr();
     let requ = req.headers();
     let readi: DateTime<Utc> = Utc::now();
-    log::info!("{} - {} - /api/v1 POST - from {:?} - {:?}", readi, &txid, peer, &requ);
+    log::info!("{} - {} - /api/SOMETHING/v1 POST - from {:?} - {:?}", readi, &txid, peer, &requ);
     let bbod = to_bytes(body).await.unwrap();
     let sbod: Result<String, _> = match std::str::from_utf8(&bbod) {
         Ok(_string) => {
@@ -72,10 +85,10 @@ pub async fn readit(req: HttpRequest, body: web::Bytes) -> impl Responder {
     let returnbod: String = runrule(rbod).await;
     if returnbod == "Failed to fetch from API" {
         let reada: DateTime<Utc> = Utc::now();
-        log::error!("{} - {} - /api/v1 BACKEND DOWN, sending response for:  {:?}", reada, &nid, requ);
+        log::error!("{} - {} - /api/SOMETHING/v1 BACKEND DOWN sending response for: {:?}", reada, &nid, requ);
     } else {
         let reada: DateTime<Utc> = Utc::now();
-        log::info!("{} - {} - /api/v1 sending response for:  {:?}", reada, &nid, requ);
+        log::info!("{} - {} - /api/SOMETHING/v1 sending response for:  {:?}", reada, &nid, requ);
     }
     HttpResponse::Ok().body(returnbod)
 }
@@ -85,7 +98,13 @@ pub async fn ifetch(url: String, key: String, sendbod: String) -> Result<String,
     let timed = Utc::now();
     log::info!("{} - {} - Fetching {:?}...", timed, &nid, url);
     let client = reqwest::Client::new();
-    let res = client.post(url).header("Content-Type", "application/json").header("Authorization", key).body(sendbod).send().await?;
+    let res = client
+        .post(url)
+        .header("Content-Type", "application/json")
+        .header("Authorization", key)
+        .body(sendbod)
+        .send()
+        .await?;
     let timeo = Utc::now();
     log::info!("{} - {} - Response: {:?} {}", &timeo, &nid, res.version(), res.status());
     let body = res.text().await;
