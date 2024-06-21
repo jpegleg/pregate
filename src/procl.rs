@@ -29,7 +29,7 @@ pub async fn runrule(linput: String) -> String {
 
     match linput.to_lowercase().as_str() {
         s if s.contains(&config.exception1) => {
-            match linput.to_lowercase().as_str() {
+            match linput {
                 s if s.contains(&config.rule2) => config.resp,
                 s if s.contains(&config.rule3) => config.resp,
                 s if s.contains(&config.rule4) => config.resp,
