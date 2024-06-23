@@ -38,6 +38,11 @@ pub async fn runrule(linput: String) -> String {
                 s if s.contains(&config.rule4) => config.resp,
                 s if s.contains(&config.rule5) => config.resp,
                 s if s.contains(&config.rule6) => config.resp,
+                _s if simsim::checkit(&config.rule2, &linput).contains("match") => config.resp,
+                _s if simsim::checkit(&config.rule3, &linput).contains("match") => config.resp,
+                _s if simsim::checkit(&config.rule4, &linput).contains("match") => config.resp,
+                _s if simsim::checkit(&config.rule5, &linput).contains("match") => config.resp,
+                _s if simsim::checkit(&config.rule6, &linput).contains("match") => config.resp,
                 _ => {
                     let callb = ifetch(config.url, config.api_key, linput).await.unwrap_or_else(|_| "Failed to fetch from API".to_string()).to_string();
                     callb
@@ -51,6 +56,11 @@ pub async fn runrule(linput: String) -> String {
         s if s.contains(&config.rule5) => config.resp,
         s if s.contains(&config.rule6) => config.resp,
         _s if simsim::checkit(&config.rule1, &linput).contains("match") => config.resp,
+        _s if simsim::checkit(&config.rule2, &linput).contains("match") => config.resp,
+        _s if simsim::checkit(&config.rule3, &linput).contains("match") => config.resp,
+        _s if simsim::checkit(&config.rule4, &linput).contains("match") => config.resp,
+        _s if simsim::checkit(&config.rule5, &linput).contains("match") => config.resp,
+        _s if simsim::checkit(&config.rule6, &linput).contains("match") => config.resp,
         _ => {
             let callb = ifetch(config.url, config.api_key, linput).await.unwrap_or_else(|_| "Failed to fetch from API".to_string()).to_string();
             callb
