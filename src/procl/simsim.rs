@@ -218,10 +218,7 @@ pub fn checkit(text1: &str, text2: &str) -> String {
         log::debug!("separator removed cosign: {:?}, calc string: {:?}", &cosign1, &result2);
         if cosign1 < 0.5 {
             "pass".to_string()
-        } else {
-            "match".to_string()
-        };
-        if cosign2 < 0.5 {
+        } else if cosign2 < 0.5 {
             "pass".to_string()
         } else {
             "match".to_string()
@@ -229,7 +226,7 @@ pub fn checkit(text1: &str, text2: &str) -> String {
 
     } else {
         let result4 = compseps(&use1, text2);
-        let cosign3= simty(&use1, &result4);
+        let cosign3 = simty(&use1, &result4);
         log::debug!("as is cosign {:?}, calc string: {:?}", &cosign3, &result4);
         if cosign3 < 0.5 {
             "pass".to_string()
