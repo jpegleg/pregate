@@ -119,7 +119,6 @@ fn identify_best_pattern(patterns: &[String]) -> Option<String> {
         .cloned()
 }
 
-
 fn removesep(text: &str, separator_pattern: &str) -> String {
     if separator_pattern.is_empty() {
         return text.to_string();
